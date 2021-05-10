@@ -2,9 +2,9 @@
 	width: 100%;
 
 	&__header {
+		display: flex;
 		height: 80rpx;
 		position: relative;
-		overflow: hidden;
 	}
 
 	&__bar {
@@ -12,6 +12,7 @@
 		white-space: nowrap;
 		text-align: center;
 		box-sizing: border-box;
+		flex: 1;
 
 		.uni-scroll-view::-webkit-scrollbar {
 			display: none;
@@ -35,11 +36,34 @@
 					margin-left: 10rpx;
 				}
 			}
+
+			&.is-active {
+				color: $cl-color-primary;
+			}
 		}
 
 		&-box {
+			display: inline-flex;
 			position: relative;
-			white-space: nowrap;
+			width: 100%;
+		}
+	}
+
+	&__dropdown {
+		line-height: 90rpx;
+		width: 100rpx;
+		text-align: center;
+		color: #fff;
+
+		&-box {
+			position: absolute;
+			top: 90rpx;
+			left: 0;
+			width: 100%;
+			box-sizing: border-box;
+			background-color: #fff;
+			overflow: hidden;
+			transition: all 0.3s;
 		}
 	}
 
@@ -94,6 +118,12 @@
 	&.is-border {
 		.cl-tabs__header {
 			border-bottom: 1rpx solid #eee;
+		}
+	}
+
+	&.is-dropdown {
+		.cl-tabs__bar {
+			width: calc(100% - 100rpx);
 		}
 	}
 }

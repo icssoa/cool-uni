@@ -68,8 +68,8 @@
 		opacity: 0.7;
 
 		.cl-button__loading {
-			position: relative;
-			top: 2rpx;
+			display: inline-flex;
+			align-items: center;
 		}
 
 		.cl-button__text {

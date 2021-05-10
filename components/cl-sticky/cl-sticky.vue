@@ -11,25 +11,26 @@ export default {
 	props: {
 		zIndex: {
 			type: Number,
-			default: 99,
+			default: 99
 		},
 		top: {
 			type: Number,
-			default: 0,
+			default: 0
 		},
 		isFlex: Boolean,
+		isTopbar: Boolean
 	},
 
 	computed: {
 		top2() {
 			// #ifdef H5
-			return `calc(44px + ${this.top}rpx)`;
+			return `calc(${this.isTopbar ? "0px" : "44px"} + ${this.top}rpx)`;
 			// #endif
 
 			// #ifndef H5
 			return `calc(0rpx + ${this.top}rpx)`;
 			// #endif
-		},
-	},
+		}
+	}
 };
 </script>

@@ -4,11 +4,11 @@
 		:class="[
 			'cl-popup__wrapper',
 			`cl-popup__wrapper--${direction}`,
-			`is-${status ? 'open' : 'close'}`,
+			`is-${status ? 'open' : 'close'}`
 		]"
 		@touchmove.stop.prevent
 	>
-		<view class="cl-popup__modal" @tap="modalClose"></view>
+		<view class="cl-popup__modal" @tap="modalClose" v-if="modal"></view>
 
 		<view
 			:class="['cl-popup']"
@@ -36,6 +36,7 @@ import { parseRpx } from "../../utils";
  * @property {String} backgroundColor 背景颜色，默认#fff
  * @property {String, Number} borderRadius 内容圆角
  * @property {String, Number} padding 内容内间据，默认20
+ * @property {Boolean} modal 是否显示遮罩层
  * @example <cl-popup :visible.sync="visible">Hello !</cl-popup>
  */
 
@@ -50,37 +51,42 @@ export default {
 		// 弹出方向
 		direction: {
 			type: String,
-			default: "left",
+			default: "left"
 		},
 		// 点击遮罩层是否关闭
 		closeOnClickModal: {
 			type: Boolean,
-			default: true,
+			default: true
 		},
 		// 弹出框大小
 		size: {
 			type: [String, Number],
-			default: "auto",
+			default: "auto"
 		},
 		// 背景颜色
 		backgroundColor: {
 			type: String,
-			default: "#fff",
+			default: "#fff"
 		},
 		// 内容圆角
 		borderRadius: [String, Number],
 		// 内容内间据
 		padding: {
 			type: [String, Number],
-			default: 20,
+			default: 20
 		},
+		// 是否显示遮罩层
+		modal: {
+			type: Boolean,
+			default: true
+		}
 	},
 
 	data() {
 		return {
 			show: false,
 			status: false,
-			timer: null,
+			timer: null
 		};
 	},
 
@@ -106,7 +112,7 @@ export default {
 				case "center":
 					return parseRpx(this.size);
 			}
-		},
+		}
 	},
 
 	watch: {
@@ -118,8 +124,8 @@ export default {
 				} else {
 					this.close();
 				}
-			},
-		},
+			}
+		}
 	},
 
 	methods: {
@@ -178,7 +184,7 @@ export default {
 			}
 
 			this.close();
-		},
-	},
+		}
+	}
 };
 </script>

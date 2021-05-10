@@ -6,12 +6,13 @@
 			'padding-top': top,
 			'background-color': backgroundColor,
 			color,
+			zIndex
 		}"
 	>
 		<view
 			class="cl-topbar__content"
 			:style="{
-				color,
+				color
 			}"
 		>
 			<slot>
@@ -25,7 +26,7 @@
 		<view
 			class="cl-topbar__prepend"
 			:style="{
-				top,
+				top
 			}"
 		>
 			<view class="cl-topbar__icon" v-if="showBack" @tap="back">
@@ -38,7 +39,7 @@
 		<view
 			class="cl-topbar__append"
 			:style="{
-				top,
+				top
 			}"
 		>
 			<slot name="append"></slot>
@@ -62,6 +63,8 @@ const { platform, statusBarHeight } = uni.getSystemInfoSync();
  * @property {String} backPath 返回路径
  * @property {Boolean} fixed 是否固定布局在顶部
  * @property {Boolean} isTop 是否添加顶部安全区域
+ * @property {Boolean} sticky 是否吸顶
+ * @property {Number} zIndex 层级
  * @example <cl-topbar title="COOL-UNI" />
  */
 
@@ -76,22 +79,22 @@ export default {
 		// 是否带有下边框
 		border: {
 			type: Boolean,
-			default: true,
+			default: true
 		},
 		// 是否显示返回按钮
 		showBack: {
 			type: Boolean,
-			default: true,
+			default: true
 		},
 		// 背景颜色
 		backgroundColor: {
 			type: String,
-			default: "#fff",
+			default: "#fff"
 		},
 		// 字体颜色
 		color: {
 			type: String,
-			default: "#000",
+			default: "#000"
 		},
 		// 返回路径
 		backPath: String,
@@ -100,8 +103,13 @@ export default {
 		// 是否添加顶部安全区域
 		isTop: {
 			type: Boolean,
-			default: true,
+			default: true
 		},
+		sticky: Boolean,
+		zIndex: {
+			type: Number,
+			default: 9
+		}
 	},
 
 	computed: {
@@ -124,8 +132,12 @@ export default {
 				list.push("is-fixed");
 			}
 
+			if (this.sticky) {
+				list.push("is-sticky");
+			}
+
 			return list.join(" ");
-		},
+		}
 	},
 
 	methods: {
@@ -135,19 +147,18 @@ export default {
 			if (pages.length == 1) {
 				//  H5页面刷新或者分享页时，页面栈长度只有1。此时逐个验证返回的页面路径
 				uni.reLaunch({
-					url:
-						this.backPath || this.$cl.homePage || this.$store.state.app.info.pages.home,
+					url: this.backPath || this.$cl.homePage || this.$store.state.app.info.pages.home
 				});
 			} else {
 				uni.navigateBack({
-					delta: 1,
+					delta: 1
 				});
 			}
 		},
 
 		tapText(e) {
 			this.$emit("click", e);
-		},
-	},
+		}
+	}
 };
 </script>
