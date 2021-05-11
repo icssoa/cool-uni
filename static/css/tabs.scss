@@ -9,7 +9,6 @@
 
 	&__bar {
 		white-space: nowrap;
-		text-align: center;
 		box-sizing: border-box;
 		flex: 1;
 
@@ -27,6 +26,7 @@
 		&-item {
 			display: inline-flex;
 			align-items: center;
+			justify-content: center;
 			height: 100%;
 			font-size: 28rpx;
 			box-sizing: border-box;
