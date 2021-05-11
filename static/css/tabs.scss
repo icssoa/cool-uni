@@ -8,7 +8,6 @@
 	}
 
 	&__bar {
-		height: 90rpx;
 		white-space: nowrap;
 		text-align: center;
 		box-sizing: border-box;
@@ -18,10 +17,17 @@
 			display: none;
 		}
 
+		&-box {
+			display: inline-flex;
+			position: relative;
+			height: 100%;
+			width: 100%;
+		}
+
 		&-item {
-			display: inline-block;
-			height: 80rpx;
-			line-height: 80rpx;
+			display: inline-flex;
+			align-items: center;
+			height: 100%;
 			font-size: 28rpx;
 			box-sizing: border-box;
 
@@ -41,29 +47,24 @@
 				color: $cl-color-primary;
 			}
 		}
-
-		&-box {
-			display: inline-flex;
-			position: relative;
-			width: 100%;
-		}
 	}
 
 	&__dropdown {
-		line-height: 90rpx;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		width: 100rpx;
-		text-align: center;
-		color: #fff;
 
 		&-box {
 			position: absolute;
-			top: 90rpx;
+			top: 80rpx;
 			left: 0;
 			width: 100%;
 			box-sizing: border-box;
 			background-color: #fff;
 			overflow: hidden;
 			transition: all 0.3s;
+			z-index: 99;
 		}
 	}
 

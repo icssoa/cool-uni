@@ -3,7 +3,7 @@
 		<view
 			class="cl-tabs__header"
 			:style="{
-				top: stickyTop
+				top: stickyTop,
 			}"
 		>
 			<scroll-view
@@ -11,14 +11,12 @@
 				scroll-with-animation
 				scroll-x
 				:scroll-left="scrollLeft"
-				:style="{
-					backgroundColor
-				}"
+				:style="[style]"
 			>
 				<view
 					class="cl-tabs__bar-box"
 					:style="{
-						'justify-content': justify
+						'justify-content': justify,
 					}"
 				>
 					<view
@@ -27,10 +25,10 @@
 						:key="index"
 						:style="{
 							color: value === item.name ? color : unColor,
-							padding: `0 ${gutter}rpx`
+							padding: `0 ${gutter}rpx`,
 						}"
 						:class="{
-							'is-active': value === item.name
+							'is-active': value === item.name,
 						}"
 						@tap="change(index)"
 					>
@@ -58,14 +56,14 @@
 						v-if="lineLeft > 0"
 						:style="{
 							'background-color': color,
-							left: lineLeft + 'px'
+							left: lineLeft + 'px',
 						}"
 					></view>
 				</view>
 			</scroll-view>
 
 			<!-- 下拉图标 -->
-			<view class="cl-tabs__dropdown" @tap="onDropdown" v-if="showDropdown">
+			<view class="cl-tabs__dropdown" :style="[style]" @tap="onDropdown" v-if="showDropdown">
 				<cl-icon :name="`${dropdown.visible ? 'arrow-top' : 'arrow-bottom'}`"></cl-icon>
 			</view>
 
@@ -73,7 +71,7 @@
 			<view
 				class="cl-tabs__dropdown-box"
 				:style="{
-					maxHeight: dropdown.visible ? dropdown.height : '0'
+					maxHeight: dropdown.visible ? dropdown.height : '0',
 				}"
 			>
 				<slot name="dropdown"></slot>
@@ -92,6 +90,7 @@
 </template>
 
 <script>
+import { isNumber } from "../../utils";
 /**
  * tabs 选项卡
  * @description 选项卡，支持滑动，自定义内容
@@ -109,6 +108,8 @@
  * @property {Boolean} border 是否带有下边框，默认true
  * @property {Number} gutter 标签间隔，默认20
  * @property {String} color 字体及浮标颜色，默认主色
+ * @property {Boolean} showDropdown 是否显示下拉按钮
+ * @property {String, Number} height 高度，默认80
  * @example 见教程
  */
 
@@ -125,19 +126,19 @@ export default {
 		// 标签列表
 		labels: {
 			type: Array,
-			default: null
+			default: null,
 		},
 		// 是否循环显示
 		loop: {
 			type: Boolean,
-			default: true
+			default: true,
 		},
 		// 是否滑动
 		swipeable: Boolean,
 		// 滑动阈值
 		swipeThreshold: {
 			type: Number,
-			default: 60
+			default: 60,
 		},
 		// 是否吸顶
 		sticky: Boolean,
@@ -146,42 +147,47 @@ export default {
 		// 是否滚动视图
 		scrollView: {
 			type: Boolean,
-			default: true
+			default: true,
 		},
 		// 标签是否填充
 		fill: Boolean,
 		// 水平布局
 		justify: {
 			type: String,
-			default: "center"
+			default: "start",
 		},
 		// 是否带有下边框
 		border: {
 			type: Boolean,
-			default: true
+			default: true,
 		},
 		// 标签间隔
 		gutter: {
 			type: Number,
-			default: 20
+			default: 20,
 		},
 		// 字体及浮标颜色，默认主色
 		color: {
 			type: String,
-			default: ""
+			default: "",
 		},
 		// 未选中字体颜色
 		unColor: {
 			type: String,
-			default: ""
+			default: "",
 		},
 		// 背景颜色
 		backgroundColor: {
 			type: String,
-			default: "#fff"
+			default: "#fff",
 		},
 		// 是否显示下拉
-		showDropdown: Boolean
+		showDropdown: Boolean,
+		// 高度
+		height: {
+			type: [String, Number],
+			default: 80,
+		},
 	},
 
 	data() {
@@ -197,8 +203,8 @@ export default {
 			dropdown: {
 				visible: false,
 				height: "200rpx",
-				timer: null
-			}
+				timer: null,
+			},
 		};
 	},
 
@@ -207,7 +213,7 @@ export default {
 			immediate: true,
 			handler(val) {
 				this.current = val || 0;
-			}
+			},
 		},
 
 		current(val) {
@@ -216,7 +222,7 @@ export default {
 
 		labels() {
 			this.refresh();
-		}
+		},
 	},
 
 	computed: {
@@ -255,7 +261,14 @@ export default {
 			}
 
 			return list.join(" ");
-		}
+		},
+
+		style() {
+			return {
+				height: isNumber(this.height) ? `${this.height}rpx` : this.height,
+				backgroundColor: this.backgroundColor,
+			};
+		},
 	},
 
 	mounted() {
@@ -278,7 +291,7 @@ export default {
 						label: e.label,
 						prefixIcon: e.prefixIcon,
 						suffixIcon: e.suffixIcon,
-						lazy: e.lazy
+						lazy: e.lazy,
 					};
 				});
 
@@ -288,7 +301,7 @@ export default {
 					.in(this)
 					// #endif
 					.select(".cl-tabs")
-					.boundingClientRect(d => {
+					.boundingClientRect((d) => {
 						this.offsetLeft = d.left;
 						this.width = d.width;
 						this.getRect();
@@ -331,7 +344,7 @@ export default {
 						.in(this)
 						// #endif
 						.select(".cl-tabs__dropdown-box")
-						.boundingClientRect(res => {
+						.boundingClientRect((res) => {
 							this.dropdown.height = res.height + "px";
 						})
 						.exec();
@@ -369,7 +382,7 @@ export default {
 		},
 
 		getIndex() {
-			return this.tabs.findIndex(e => e.name == this.current);
+			return this.tabs.findIndex((e) => e.name == this.current);
 		},
 
 		prev() {
@@ -392,7 +405,7 @@ export default {
 					.in(this)
 					.selectAll(".cl-tabs__bar-item")
 					.fields({ rect: true, size: true })
-					.exec(d => {
+					.exec((d) => {
 						this.tabRect = d[0];
 						this.onOffset();
 					});
@@ -417,7 +430,7 @@ export default {
 					}
 				});
 			}
-		}
-	}
+		},
+	},
 };
 </script>
