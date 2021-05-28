@@ -57,7 +57,7 @@ class ClCanvas {
 
 	// 绘画
 	draw(save = false) {
-		return new Promise(resolve => {
+		return new Promise((resolve) => {
 			let next = () => {
 				this.render();
 				this.ctx.draw(save, () => {
@@ -75,11 +75,11 @@ class ClCanvas {
 
 	// 生成图片
 	createImage(options) {
-		return new Promise(resolve => {
+		return new Promise((resolve) => {
 			let data = {
 				canvasId: this.canvasId,
 				...options,
-				success: res => {
+				success: (res) => {
 					// #ifdef MP-ALIPAY
 					resolve(res.apFilePath);
 					// #endif
@@ -88,9 +88,9 @@ class ClCanvas {
 					resolve(res.tempFilePath);
 					// #endif
 				},
-				fail: err => {
+				fail: (err) => {
 					reject(err);
-				}
+				},
 			};
 
 			// #ifdef MP-ALIPAY
@@ -106,33 +106,33 @@ class ClCanvas {
 	// 保存图片
 	saveImage(options) {
 		uni.showLoading({
-			title: "图片下载中..."
+			title: "图片下载中...",
 		});
-		this.createImage(options).then(path => {
-			return new Promise(resolve => {
+		this.createImage(options).then((path) => {
+			return new Promise((resolve) => {
 				uni.hideLoading();
 				uni.saveImageToPhotosAlbum({
 					filePath: path,
 					success: () => {
 						uni.showToast({
-							title: "保存图片成功"
+							title: "保存图片成功",
 						});
 						resolve();
 					},
-					fail: err => {
+					fail: (err) => {
 						// #ifdef MP-ALIPAY
 						uni.showToast({
-							title: "保存图片成功"
+							title: "保存图片成功",
 						});
 						// #endif
 
 						// #ifndef MP-ALIPAY
 						uni.showToast({
 							title: "保存图片失败",
-							icon: "none"
+							icon: "none",
 						});
 						// #endif
-					}
+					},
 				});
 			});
 		});
@@ -140,9 +140,9 @@ class ClCanvas {
 
 	// 预览图片
 	previewImage(options) {
-		this.createImage(options).then(url => {
+		this.createImage(options).then((url) => {
 			uni.previewImage({
-				urls: [url]
+				urls: [url],
 			});
 		});
 	}
@@ -156,20 +156,42 @@ class ClCanvas {
 
 			// 处理base64
 			if (item.url.indexOf("data:image") >= 0) {
-				return resolve(item.url);
+				let extName = item.url.match(/data\:\S+\/(\S+);/);
+				if (extName) {
+					extName = extName[1];
+				}
+				const fs = wx.getFileSystemManager();
+				const fileName = Date.now() + "." + extName;
+				const filePath = wx.env.USER_DATA_PATH + "/" + fileName;
+
+				return fs.writeFile({
+					filePath,
+					data: item.url.replace(/^data:\S+\/\S+;base64,/, ""),
+					encoding: "base64",
+					success: () => {
+						item.url = filePath;
+						resolve(filePath);
+					},
+				});
 			}
+
+			// 是否网络图片
+			const isHttp = item.url.includes("http");
 
 			uni.getImageInfo({
 				src: item.url,
-				success: result => {
+				success: (result) => {
 					item.sheight = result.height;
 					item.swidth = result.width;
+					if (isHttp) {
+						item.url = result.path;
+					}
 					resolve(result.path);
 				},
-				fail: err => {
+				fail: (err) => {
 					console.log(err);
 					reject(err);
-				}
+				},
 			});
 		});
 	}
@@ -366,8 +388,14 @@ class ClCanvas {
 
 	// 渲染文本
 	textRender(options) {
-		let { fontSize = 14, color = "#000000", x, y, letterSpace, lineHeight = 14 } =
-			options || {};
+		let {
+			fontSize = 14,
+			color = "#000000",
+			x,
+			y,
+			letterSpace,
+			lineHeight = 14,
+		} = options || {};
 
 		this.ctx.save();
 
@@ -466,7 +494,7 @@ class ClCanvas {
 
 	// 渲染全部
 	render() {
-		this.renderQuene.forEach(ele => {
+		this.renderQuene.forEach((ele) => {
 			ele();
 		});
 	}

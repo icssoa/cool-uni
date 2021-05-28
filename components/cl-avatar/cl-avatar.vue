@@ -1,5 +1,5 @@
 <template>
-	<view :class="['cl-avatar', isShape]" :style="{ height, width }">
+	<view :class="['cl-avatar', isShape]" :style="{ height, width, backgroundColor }">
 		<slot v-if="$slots.default || $slots.$default"> </slot>
 
 		<template v-else>
@@ -83,6 +83,10 @@ export default {
 
 		fontSize() {
 			return this.size / 1.7 + "rpx";
+		},
+
+		backgroundColor() {
+			return this.src ? "" : "#c0c4cc";
 		},
 	},
 
