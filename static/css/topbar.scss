@@ -33,11 +33,11 @@
 		height: 44px;
 		position: absolute;
 
-		// # ifdef MP
+		/* #ifdef MP */
 		& > view {
 			display: flex;
 		}
-		// # endif
+		/* #endif */
 	}
 
 	&__prepend {

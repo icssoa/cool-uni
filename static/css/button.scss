@@ -14,12 +14,12 @@
 	background-color: #fff;
 	border-radius: 10rpx;
 
-	// #ifdef MP
+	/* #ifdef MP */
 	cl-loading {
 		display: inline-flex;
 		align-items: center;
 	}
-	// #endif
+	/* #endif */
 
 	&__text {
 		display: inline;

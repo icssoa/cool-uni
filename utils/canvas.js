@@ -155,6 +155,7 @@ class ClCanvas {
 			}
 
 			// 处理base64
+			// #ifdef MP
 			if (item.url.indexOf("data:image") >= 0) {
 				let extName = item.url.match(/data\:\S+\/(\S+);/);
 				if (extName) {
@@ -174,6 +175,7 @@ class ClCanvas {
 					},
 				});
 			}
+			// #endif
 
 			// 是否网络图片
 			const isHttp = item.url.includes("http");
@@ -189,7 +191,7 @@ class ClCanvas {
 					resolve(result.path);
 				},
 				fail: (err) => {
-					console.log(err);
+					console.log(err, item.url);
 					reject(err);
 				},
 			});
@@ -390,6 +392,8 @@ class ClCanvas {
 	textRender(options) {
 		let {
 			fontSize = 14,
+			align,
+			width,
 			color = "#000000",
 			x,
 			y,
@@ -411,9 +415,19 @@ class ClCanvas {
 		// 获取文本行高
 		let lh = lineHeight - fontSize;
 
+		// 左偏移
+		let offsetLeft = 0;
+
+		// 字体对齐
+		if (align && width) {
+			this.ctx.textAlign = align;
+			offsetLeft = width / 2;
+		}
+
 		// 逐行写入
 		for (let i = 0; i < rows.length; i++) {
-			let d = 0;
+			let d = offsetLeft;
+
 			if (letterSpace) {
 				for (let j = 0; j < rows[i].length; j++) {
 					// 写入文字
@@ -424,7 +438,7 @@ class ClCanvas {
 				}
 			} else {
 				// 写入文字
-				this.ctx.fillText(rows[i], x, (i + 1) * fontSize + y + lh * i);
+				this.ctx.fillText(rows[i], x + offsetLeft, (i + 1) * fontSize + y + lh * i);
 			}
 		}
 
