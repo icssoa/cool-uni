@@ -1,5 +1,5 @@
 // 是否开发模式
-export const isDev = process.env.NODE_ENV == "development"
+export const isDev = process.env.NODE_ENV == "development";
 
 // 是否Array类型
 export function isArray(value) {
@@ -149,7 +149,7 @@ export function getCurrentPage() {
 		query: options,
 		// #endif
 		// #ifdef H5
-		query: $route.params
+		query: $route.params,
 		// #endif
 	};
 }
@@ -198,7 +198,7 @@ export function getCurrentColor({ color, max, value }) {
 				if (isString(item)) {
 					return {
 						color: item,
-						value: (index + 1) * (max / color.length)
+						value: (index + 1) * (max / color.length),
 					};
 				}
 				return item;
@@ -216,10 +216,10 @@ export function getCurrentColor({ color, max, value }) {
 }
 
 // 获取地址栏参数
-export function getQueryString(name) {
-	let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+export function getUrlParam(name) {
+	let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 	let r = window.location.search.substr(1).match(reg);
-	if (r != null) return unescape(r[2]);
+	if (r != null) return decodeURIComponent(r[2]);
 	return null;
 }
 

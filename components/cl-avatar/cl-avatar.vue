@@ -10,7 +10,7 @@
 			</slot>
 
 			<slot name="error" v-else-if="isError">
-				<view class="cl-avatar__error"> 加载失败 </view>
+				<view class="cl-avatar__error"> Error </view>
 			</slot>
 
 			<image
@@ -44,6 +44,7 @@ export default {
 	props: {
 		// 图片链接
 		src: String,
+		// 懒加载
 		lazyLoad: Boolean,
 		// 头像大小
 		size: {

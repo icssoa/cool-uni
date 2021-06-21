@@ -1,6 +1,7 @@
 <template>
 	<view
 		:class="['cl-list-item', isAppend, isDisabled, isBorder]"
+		:style="[customStyle]"
 		@touchstart="onTouchStart"
 		@touchmove="onTouchMove"
 		@touchend="onTouchEnd"
@@ -84,6 +85,8 @@ export default {
 				return ["none", "left", "right"].indexOf(val) !== -1;
 			},
 		},
+		// 自定义样式
+		customStyle: Object,
 	},
 
 	mixins: [Parent],

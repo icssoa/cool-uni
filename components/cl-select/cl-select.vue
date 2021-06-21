@@ -20,9 +20,10 @@
 						placeholder
 					}}</text></text
 				>
-				<text class="cl-select__icon cl-icon-arrow-bottom"></text>
 			</view>
 		</picker>
+
+		<text class="cl-select__icon cl-icon-arrow-bottom"></text>
 	</view>
 </template>
 
