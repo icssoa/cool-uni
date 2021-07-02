@@ -7,7 +7,7 @@
 
 		<!-- 值 -->
 		<view class="cl-input-number__value" :style="{ width: width2 }">
-			<input type="number" v-model="value2" @change="update" v-if="input" />
+			<input type="number" v-model="value2" @blur="onBlur" v-if="input" />
 			<text v-else>{{ value2 }}</text>
 		</view>
 
@@ -42,29 +42,35 @@ export default {
 	props: {
 		// 绑定值
 		value: {
-			type: Number,
+			type: [String, Number],
 			required: true,
 		},
+		// 步进
 		step: {
 			type: Number,
 			default: 1,
 		},
+		// 最大值
 		max: {
 			type: Number,
 			default: 100,
 		},
+		// 最小值
 		min: {
 			type: Number,
 			default: 0,
 		},
+		// 是否能输入
 		input: {
 			type: Boolean,
 			default: false,
 		},
+		// 宽度
 		width: {
 			type: Number,
 			default: 100,
 		},
+		// 小数
 		precision: Number,
 	},
 
@@ -84,25 +90,63 @@ export default {
 		value: {
 			immediate: true,
 			handler(val) {
-				// 验证值，判断是否过大过小
-				if (val < this.min) {
-					val = this.min;
-				}
-
-				if (val > this.max) {
-					val = this.max;
-				}
-
-				if (this.min > this.max) {
-					val = this.max;
-				}
-
-				this.value2 = val;
+				this.check(val);
+			},
+		},
+		max: {
+			handler() {
+				this.update();
+			},
+		},
+		min: {
+			handler() {
+				this.update();
 			},
 		},
 	},
 
 	methods: {
+		// 验证值
+		check(val) {
+			if (val === undefined) {
+				val = this.value2;
+			}
+
+			// 是否字符
+			if (isString(val)) {
+				val = Number(val);
+			}
+
+			// 是否小数
+			if (isDecimal(val)) {
+				val = Number(val.toFixed(this.precision || 0));
+			}
+
+			// 最小
+			if (val < this.min) {
+				val = this.min;
+			}
+
+			// 最大
+			if (val > this.max) {
+				val = this.max;
+			}
+
+			// 最小不能超过最大
+			if (this.min > this.max) {
+				val = this.max;
+			}
+
+			this.value2 = val;
+		},
+
+		// 更新值
+		update() {
+			this.check();
+			this.$emit("input", this.value2);
+			this.$emit("change", this.value2);
+		},
+
 		onPlus() {
 			this.value2 += this.step;
 
@@ -123,24 +167,8 @@ export default {
 			this.update();
 		},
 
-		update() {
-			// 是否字符
-			if (isString(this.value2)) {
-				this.value2 = Number(this.value2);
-			}
-
-			// 是否小数
-			if (isDecimal(this.value2)) {
-				this.value2 = Number(this.value2.toFixed(this.precision || 0));
-			}
-
-			// 是否超额
-			if (this.min > this.max) {
-				this.value2 = this.max;
-			}
-
-			this.$emit("input", this.value2);
-			this.$emit("change", this.value2);
+		onBlur() {
+			this.update();
 		},
 	},
 };
